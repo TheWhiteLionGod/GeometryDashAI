@@ -1,0 +1,8 @@
+mss==10.0.0
+numpy==2.3.1
+pyautogui==0.9.54
+pynput==1.8.1
+pywin32==311
+torch==2.4.1
+torch_directml==0.2.5.dev240914
+torchvision==0.19.1
