@@ -26,7 +26,7 @@ class Player():
         self.transform = transforms.Compose([
             transforms.ToPILImage(),  # Convert to PIL Image
             transforms.Resize((84, 84)), # Smaller resolution for faster processing
-            transforms.Grayscale(num_output_channels=1), # (128, 128)
+            transforms.Grayscale(num_output_channels=1),
             transforms.ToTensor()
         ])
 

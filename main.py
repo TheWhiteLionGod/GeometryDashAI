@@ -29,7 +29,6 @@ def validate_window(hwnd):
 
 def bot_loop(hwnd, player: Player, stop_event, input_lock, shared_memory_list):
     """Optimized bot loop with better error handling and performance"""
-    # try:
     rect = win32gui.GetWindowRect(hwnd)
     game = GeometryDash(hwnd, rect)
     
@@ -93,8 +92,6 @@ def bot_loop(hwnd, player: Player, stop_event, input_lock, shared_memory_list):
         if stop_event.is_set(): break
     print(f"[{mp.current_process().name}] Stopping bot loop for window {hwnd}")
 
-    # except Exception as e:
-    #     print(f"[{mp.current_process().name}] Error in bot loop for window {hwnd}: {e}")
 
 def create_bot_process(hwnds: list[int], players:list[Player], stop_event, input_lock, shared_memory_list):
     bot_threads = []

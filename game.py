@@ -106,7 +106,7 @@ class GeometryDash:
         self.keyboard.press(keyboard.Key.space)
 
     def release_jump(self):
-        """Presses the jump key."""
+        """Releases the jump key."""
         self.keyboard.release(keyboard.Key.space)
 
     def reset_inputs(self):

@@ -32,28 +32,24 @@ def attach_input(hwnd):
         try:
             win32process.AttachThreadInput(current_thread, target_thread, True)
             attached_threads.add(target_thread)
-            print(f"Attached input thread {target_thread} for HWND {hwnd}")
         except Exception as e:
-            print(f"Failed to attach input for HWND {hwnd}: {e}")
+            pass
 
 def detach_all_input():
     current_thread = win32api.GetCurrentThreadId()
     for tid in list(attached_threads):
         try:
             win32process.AttachThreadInput(current_thread, tid, False)
-            print(f"Detached input thread {tid}")
             attached_threads.remove(tid)
         except Exception as e:
-            print(f"Failed to detach input thread {tid}: {e}")
+            pass
 
 def set_focus(hwnd):
     try:
         win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
         win32gui.SetForegroundWindow(hwnd)
-        print(f"Focused window {hwnd}")
         return True
     except Exception as e:
-        print(f"Could not focus window {hwnd}: {e}")
         return False
 
 def bot_loop(hwnd, stop_event, rect):
@@ -64,13 +60,10 @@ def bot_loop(hwnd, stop_event, rect):
 
     while not stop_event.is_set():
         if not win32gui.IsWindow(hwnd) or not win32gui.IsWindowVisible(hwnd):
-            print(f"Window {hwnd} closed or hidden. Exiting bot thread.")
             break
         
         with input_lock:
             if not set_focus(hwnd):
-                print(f"Failed to focus {hwnd}")
-                # time.sleep(1)
                 continue
 
             win32gui.MoveWindow(hwnd, x, y, width, height, True)
@@ -79,19 +72,14 @@ def bot_loop(hwnd, stop_event, rect):
                 controller.press(keyboard_controller.Key.space)
                 time.sleep(0.1)
                 controller.release(keyboard_controller.Key.space)
-                print(f"Sent space to window {hwnd}")
             except Exception as e:
-                print(f"Input error on {hwnd}: {e}")
-
-        time.sleep(0.5)
+                pass
+            time.sleep(0.5)
 
 def main():
     hwnds = find_all_windows(WINDOW_NAME)
     if not hwnds:
-        print("No Geometry Dash windows found.")
         return
-
-    print(f"Found {len(hwnds)} Geometry Dash windows.")
 
     stop_event = threading.Event()
     bot_threads = []
@@ -104,11 +92,8 @@ def main():
         bot_threads.append(t)
         time.sleep(0.25)  # Stagger thread creation
 
-    print("Bot started. Press ESC to stop.")
-
     def on_press(key):
         if key == pynput_keyboard.Key.esc:
-            print("ESC pressed. Stopping...")
             stop_event.set()
             return False
 
@@ -119,7 +104,6 @@ def main():
         t.join()
 
     detach_all_input()
-    print("Clean shutdown complete.")
 
 if __name__ == "__main__":
     main()
